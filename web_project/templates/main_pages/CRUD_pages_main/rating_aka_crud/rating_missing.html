@@ -1,0 +1,125 @@
+{% extends "main.html" %}
+
+{% block title %}Update Movie Details{% endblock %}
+
+{% block extra_styles %}
+<style>
+    .new_container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin: 20px auto;
+        max-width: 800px;  
+        padding: 20px;
+        text-align: center; 
+    }
+    .rating_aka_box{
+
+        width: 100%;
+        max-width: 700px;
+        margin: 10px 0;
+        padding: 20px;
+        border: 1px solid #4a6e8a;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1>Update Movie Details for {{ result.id }}</h1>
+
+<div class="new_container">
+    <div class="rating_aka_box">
+        <h2>ADD Rating</h2>
+<form method="POST" action="/rating_add/{{ result.id }}">
+    <div>
+        <label for="rating">Rating:</label>
+        <input 
+            type="number" 
+            step="0.01" 
+            id="rating" 
+            name="rating" 
+            value="{{ rating if rating else '' }}" 
+            placeholder="Enter rating">
+    </div>
+    <div>
+        <label for="votes">Number of Votes:</label>
+        <input 
+            type="number" 
+            id="votes" 
+            name="votes" 
+            value="{{ votes if votes else '' }}" 
+            placeholder="Enter number of votes">
+    </div>
+    <button type="submit">Add Rating</button>
+</form>
+</div>
+
+<div class="rating_aka_box">
+    <h2>Alternate Titles (Akas)</h2>
+    {% for aka in result.akas %}
+<form method="POST" action="/aka_update/{{ result.id }}">
+    <div>
+        
+            <div class="aka-entry">
+                <label for="aka_title_{{ aka.order }}">Title (Aka #{{ aka.order }}):</label>
+                <input 
+                    type="text" 
+                    id="aka_title_{{ aka.order }}" 
+                    name="akas[{{ aka.order }}][title]" 
+                    value="{{ aka.title }}">
+                <label for="aka_country_{{ aka.order }}">Country:</label>
+                <input 
+                    type="text" 
+                    id="aka_country_{{ aka.order }}" 
+                    name="akas[{{ aka.order }}][country]" 
+                    value="{{ aka.country }}">
+                <label for="aka_isOriginal_{{ aka.order }}">Is Original?</label>
+                <input 
+                    type="checkbox" 
+                    id="aka_isOriginal_{{ aka.order }}" 
+                    name="akas[{{ aka.order }}][isOriginal]" 
+                    {% if aka.isOriginal %}checked{% endif %}>
+            </div>
+       
+    </div>
+    <button type="submit">Update</button>
+</form>
+<form method="POST" action="/delete_aka/{{ result.id }}/{{ aka.order }}">
+    <button type="submit">Delete Aka #{{ aka.order }}</button>
+</form>
+{% endfor %}
+</div>
+
+
+<div class="rating_aka_box">
+<form method="POST" action="/aka_add/{{ result.id }}">
+    <div>
+        <h2>Add New Alternate Title</h2>
+        <label for="new_aka_title">Title:</label>
+        <input 
+            type="text" 
+            id="new_aka_title" 
+            name="new_aka_title" 
+            placeholder="Enter new alternate title">
+        
+        <label for="new_aka_country">Country:</label>
+        <input 
+            type="text" 
+            id="new_aka_country" 
+            name="new_aka_country" 
+            placeholder="Enter country">
+
+        <label for="new_aka_isOriginal">Is Original?</label>
+        <input 
+            type="checkbox" 
+            id="new_aka_isOriginal" 
+            name="new_aka_isOriginal">
+    </div>
+    <button type="submit">Add New Aka</button>
+</form>
+</div>
+</div>
+{% endblock %}

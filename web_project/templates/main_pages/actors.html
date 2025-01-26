@@ -1,0 +1,84 @@
+{% extends "main.html" %}
+
+{% block title %}Actors{% endblock %}
+
+{% block extra_styles %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<style>
+    body {
+        font-family: Arial, sans-serif;
+    }
+    .container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 20px;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<body class="{% if request.path == '/actors' %}actors-page{% endif %}">
+<!-- Error message -->
+{% if message %}
+    <div class="error-message">
+        <p>{{ message }}</p>
+    </div>
+{% endif %}
+
+<div class="container">
+    <form class="filter-form" method="GET" action="/actors">
+        <!-- Filter by -->
+        <label for="filter_by">Filter by:</label>
+        <select name="filter_by">
+            <option value="actor_name">Actor Name</option>
+            <option value="birth_year">Birth Year</option>
+            <!-- Add other filtering options as needed -->
+        </select>
+        <input type="text" name="filter_value" placeholder="Enter filter value" value="{{ request.args.get('filter_value') }}">
+    
+        <!-- Sort by -->
+        <label for="sort_by">Sort by:</label>
+        <select name="sort_by">
+            <option value="actor_name" {% if request.args.get('sort_by') == 'actor_name' %}selected{% endif %}>Actor Name</option>
+            <option value="birth_year" {% if request.args.get('sort_by') == 'birth_year' %}selected{% endif %}>Birth Year</option>
+            <!-- Add other sorting options as needed -->
+        </select>
+
+        <!-- Sort Order -->
+        <label for="sort_order">Sort Order:</label>
+        <select name="sort_order">
+            <option value="ASC" {% if request.args.get('sort_order') == 'ASC' %}selected{% endif %}>Ascending</option>
+            <option value="DESC" {% if request.args.get('sort_order') == 'DESC' %}selected{% endif %}>Descending</option>
+        </select>
+    
+        <button type="submit" class="main-btn">Apply</button>
+    </form>
+</div>
+
+<div class="scrollable-table">
+    <table class="actors-table">
+        <thead>
+            <tr>
+                <th>Actor Name</th>
+                <th>Birth Year</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for actor in actors %}
+            <tr>
+                <td><a href="/names/{{ actor['nconst'] }}">{{ actor['actor_name'] }}</a></td>
+                <td>{{ actor['birth_year'] }}</td>
+                <td>
+                    <a href="{{ url_for('actors.update_actor_route', nconst=actor['nconst']) }}">Edit</a> |
+                    <form method="POST" action="{{ url_for('actors.delete_actor_route', nconst=actor['nconst']) }}" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this actor?');">
+                        <button type="submit" style="background:none;border:none;color:blue;cursor:pointer;padding:0;">Delete</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

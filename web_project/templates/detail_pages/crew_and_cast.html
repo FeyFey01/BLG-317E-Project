@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actors and Roles</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #1A3B5D;
+            color: white;
+            text-align: center;
+            padding: 1.5em 0;
+            position: relative;
+        }
+
+        .edit-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 10px 15px;
+            background-color: #1A3B5D;
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .edit-button:hover {
+            background-color: #16324A;
+        }
+
+        main {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        table th {
+            background-color: #1A3B5D;
+            color: white;
+        }
+
+        a {
+            color: #1A3B5D;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        a:hover {
+            color: #16324A;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1em 0;
+            background-color: #1A3B5D;
+            color: white;
+            margin-top: 20px;
+        }
+
+        .details-section {
+            margin-bottom: 20px;
+        }
+
+        .details-section h2 {
+            margin-bottom: 10px;
+            color: #1A3B5D;
+        }
+
+        .details-section p {
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>{{ result.title }} ({{ result.start_year }} - {{ result.end_year or 'Present' }})</h1>
+
+    </header>
+
+    <main>
+        <section class="details-section">
+            <h2>Details</h2>
+            <p><strong>Type:</strong> {{ result.title_type }}</p>
+            <p><strong>Genre:</strong> {{ result.genre }}</p>
+            <p><strong>Director:</strong> {{ result.director or 'N/A' }}</p>
+            <p><strong>Writer:</strong> {{ result.writer or 'N/A' }}</p>
+        </section>
+
+        <section>
+            <h2>Cast</h2>
+            {% if result.cast %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Actor Name</th>
+                            <th>Role Category</th>
+                            <th>Character Name</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for actor in result.cast %}
+                            <tr>
+                                <td>
+                                    <a href="{{ url_for('actors.actors_list', nconst=actor['nconst']) }}">
+                                        {{ actor['original_name'] }}
+                                    </a>
+                                </td>
+                                <td>{{ actor['category'] }}</td>
+                                <td>{{ actor['character_name'] }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>No cast information available.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Row Downey Juniors</p>
+    </footer>
+</body>
+</html>

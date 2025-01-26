@@ -1,0 +1,12 @@
+# Ignore the virtual environment directory
+myenv/
+
+# Ignore config.py if it contains sensitive information like credentials
+config.py
+
+# Optionally, ignore the .env file if you are using one for environment variables
+.env
+
+*.pyc
+
+.idea/

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Cast</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Update Cast for {{ movie.title }}</h1>
+    </header>
+
+    <main>
+        <form method="POST" action="{{ url_for('cast_update_route', tconst=movie.tconst) }}">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Original Name</th>
+                        <th>Category</th>
+                        <th>Character Name</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cast_member in movie.cast %}
+                    <tr>
+                        <td>
+                            <input type="text" name="cast_data[{{ loop.index0 }}][original_name]" 
+                                   value="{{ cast_member.original_name }}" readonly>
+                        </td>
+                        <td>
+                            <input type="text" name="cast_data[{{ loop.index0 }}][category]" 
+                                   value="{{ cast_member.category }}">
+                        </td>
+                        <td>
+                            <input type="text" name="cast_data[{{ loop.index0 }}][character_name]" 
+                                   value="{{ cast_member.character_name }}">
+                        </td>
+                        <td>
+                            <button type="button" onclick="removeRow(this)">Remove</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+            <button type="button" onclick="addNewRow()">Add New Cast</button>
+            <button type="submit">Update Cast</button>
+        </form>
+        
+
+        <a href="{{ url_for('some_cast_view_route', tconst=movie.tconst) }}">Back to Cast Details</a>
+    </main>
+
+    <script>
+        function addNewRow() {
+            const tbody = document.querySelector('table tbody');
+            const newRow = document.createElement('tr');
+            newRow.innerHTML = `
+                <td><input type="text" name="cast_data[][original_name]" value="" placeholder="New Actor"></td>
+                <td><input type="text" name="cast_data[][category]" value="" placeholder="Category"></td>
+                <td><input type="text" name="cast_data[][character_name]" value="" placeholder="Character"></td>
+                <td><button type="button" onclick="removeRow(this)">Remove</button></td>
+            `;
+            tbody.appendChild(newRow);
+        }
+
+        function removeRow(button) {
+            const row = button.closest('tr');
+            row.remove();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Update Actor</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
+        }
+
+        header {
+            background-color: #1A3B5D;
+            color: white;
+            text-align: center;
+            padding: 1.5em 0;
+        }
+
+        main {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            grid-column: span 2;
+            padding: 10px 15px;
+            background-color: #1A3B5D;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #16324A;
+        }
+
+        a {
+            display: block;
+            margin-top: 20px;
+            text-align: center;
+            text-decoration: none;
+            color: #1A3B5D;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        a:hover {
+            color: #122A3F;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1em 0;
+            background-color: #1A3B5D;
+            color: white;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Update Actor</h1>
+    </header>
+
+    <main>
+        <form method="POST" action="{{ url_for('actors.update_actor_route', nconst=actor['nconst']) }}">
+            <div class="form-group">
+                <label for="known_name">Known Name:</label>
+                <input type="text" name="known_name" id="known_name" value="{{ actor['knownName'] }}" required>
+            </div>
+            <div class="form-group">
+                <label for="birth_year">Birth Year:</label>
+                <input type="number" name="birth_year" id="birth_year" value="{{ actor['birthYear'] }}" min="1900" max="2024" placeholder="e.g., 1980">
+            </div>
+            <div class="form-group">
+                <label for="death_year">Death Year:</label>
+                <input type="number" name="death_year" id="death_year" value="{{ actor['deathYear'] }}" min="1900" max="2024" placeholder="Leave blank if alive">
+            </div>
+            <div class="form-group">
+                <label for="primary_profession">Primary Profession:</label>
+                <select name="primary_profession" id="primary_profession">
+                    <option value="Writer" {{ 'selected' if actor['primaryProfession'] == 'Writer' else '' }}>Writer</option>
+                    <option value="Director" {{ 'selected' if actor['primaryProfession'] == 'Director' else '' }}>Director</option>
+                    <option value="Actor" {{ 'selected' if actor['primaryProfession'] == 'Actor' else '' }}>Actor</option>
+                </select>
+            </div>
+            <button type="submit">Update Actor</button>
+        </form>
+
+        <a href="{{ url_for('actors.actors_list') }}">&#8592; Back to Actors List</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2024 Row Downey Juniors</p>
+    </footer>
+</body>
+</html>
